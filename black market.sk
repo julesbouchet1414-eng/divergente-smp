@@ -1,0 +1,38 @@
+command /blackmarket:
+	trigger:
+		open chest inventory with 1 row named "marcher noir" to player
+		set {bouton_black_market_mort} to bone named "rachat de mort &a&l 5000$ (en vente = %{total_mort_serveur}% "
+		set slot 4 of player's current inventory to {bouton_black_market_mort}
+
+on inventory click:
+	if name of player's current inventory is "marcher noir":
+		cancel event
+		if clicked slot is 4:
+			if {total_mort_serveur} <= 0:
+				send "&e aucune mort utilisée à vendre" to player
+			else:
+				open chest inventory with 1 row named "confirmation" to player
+				set slot 1 of player's current inventory to green wool named "comfirmer"
+				set slot 7 of player's current inventory to red wool named "annuler"
+
+on death:
+	if victim is a player:
+		add 1 to {total_mort_serveur}
+
+on inventory click:
+	if name of player's current inventory is "confirmation":
+		cancel event 
+		if clicked slot is 1:
+			execute console command "/eco take %player% 5000 "
+			remove 1 from {morts.%uuid of player%}
+			remove 1 from {total_mort_serveur}
+			send "&e la transaction a bien été éffectuer" to player
+			close player's inventory
+		if clicked slot is 7:
+			send "&epayement annuler" to player
+			close player's inventory
+
+command /resettotalmortserveur:
+	trigger:
+		set {total_mort_serveur} to 0
+		send "variable mise a %{total_mort_serveur}%"

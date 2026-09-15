@@ -1,0 +1,100 @@
+# commande et interface du menu
+
+command /menu:
+	trigger:
+		open chest inventory with 1 rows named "Menu" to player
+		set {_player head bouton} to player head named "&e&lStats"
+		set {_eye of ender bouton} to diamond sword named "&c&lQuetes"
+		set slot 0 of player's current inventory to {_player head bouton}
+		set slot 1 of player's current inventory to {_eye of ender bouton}
+		set slot 2 of player's current inventory to honeycomb named "&d&lZone"
+		
+command /stats:
+	trigger:
+		open chest inventory with 1 rows named "stats %player%" to player
+		set {_player money bouton} to diamond named "%player's money%"
+		set {_kill player bouton} to diamond sword named "tu as %{kill.%uuid of player%}% kill"
+		set {_retours bouton} to barrier named "&4 retour "
+		set {_death player bouton} to zombie head named "tu est mort %{deathbouton.%uuid of player%}% fois"
+		set slot 0 of player's current inventory to {_player money bouton}
+		set slot 1 of player's current inventory to {_kill player bouton}
+		set slot 8 of player's current inventory to {_retours bouton}
+		set slot 2 of player's current inventory to {_death player bouton}
+
+		
+# bouton du menu
+
+
+
+on inventory click:
+	if name of player's current inventory is "menu":
+		cancel event
+		if clicked slot is 0:
+			close player's inventory
+			make player execute command "/stats"
+		if clicked slot is 1:
+			close player's inventory 
+			make player execute command "/quest"
+		if clicked slot is 2:
+			open chest inventory with 1 rows named "Zone" to player
+			set slot 0 of player's current inventory to emerald named "&a&lShop"
+			set slot 1 of player's current inventory to oak boat named "&3&lPort"
+		
+
+	else if name of player's current inventory is "stats %player%":
+		cancel event 
+		if clicked slot is 0:
+			send "-------------------------"
+			send "tu as %player's money%"
+			send "-------------------------" 
+		if clicked slot is 1:
+			send "---------------"
+			send "tu as %{kill.%uuid of player%}% kill"
+			send "---------------"
+		if clicked slot is 8:
+			close player's inventory
+			make player execute command "/menu"
+		if clicked slot is 2:
+			send "---------------"
+			send "tu est mort %{deathbouton.%uuid of player%}% fois"
+			send "---------------"
+
+on inventory click:
+	if name of player's current inventory is "Zone":
+		cancel event 
+		if clicked slot is 0:
+			close player's inventory
+			execute player command "/warp shop"
+		if clicked slot is 1:
+			close player's inventory 
+			execute player command "/warp port"
+
+# kill d'un player
+
+on death of a player:
+	if attacker is a player:
+		add 1 to {kill.%uuid of attacker%}
+
+# mort d'un player
+
+on death of a player:
+	if victim is a player:
+		add 1 to {deathbouton.%uuid of victim%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

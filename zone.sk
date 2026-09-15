@@ -1,0 +1,9 @@
+on join:
+	set slot 4 of player's inventory to compass named "&a&lMenu"
+
+
+on rightclick:
+	if player's tool is compass:
+		if name of player's tool is "&a&lMenu":	
+			execute player command "menu"
+

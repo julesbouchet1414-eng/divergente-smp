@@ -1,0 +1,127 @@
+# message quand il rejoint 
+on join:
+	wait 40 ticks
+	send "fait /quest pour commencer!"
+
+
+	# comande /quest
+command /quest:
+	trigger:
+		open chest inventory with 1 row named "quete" to player
+		set {bouton quete1} to grass block named "&c&lCommencer"
+		set slot 4 of player's current inventory to {bouton quete1}
+
+
+# bouton et message pour la premiere quete
+on inventory click:
+	if name of player's current inventory is "quete":
+		cancel event
+		if clicked slot is 4:
+			if {quest1.%uuid of player%} is 0:
+				close player's inventory
+				send "&9--------------------------" to player
+				send "&ecommence par couper du bois" to player
+				send "&9--------------------------" to player
+
+				send action bar "&2commence par couper du bois" to player
+				set {breakoaklog.%uuid of player%} to 0
+				add 1 to {quest1.%uuid of player%}
+			else:
+				send "&e tu a deja fait les quêtes, d'autre sont en developpement"
+
+
+			# recompense et fonctionement pour la premiere quete
+on block break:
+	if event-block is oak log:
+		add 1 to {breakoaklog.%uuid of player%}
+		if {quest1.%uuid of player%} is 1:
+			if {breakoaklog.%uuid of player%} is 1:
+				play sound "entity.player.levelup" to player
+				launch ball colored red, purple and white at player
+				send action bar "&ebravo tu a fait l'etape 1 des quetes" to player
+				send "&9------------------------------------" to player
+				send "&ebravo tu a fait l'etape 1 des quetes" to player
+				send "&9------------------------------------" to player
+				set {quest1.%uuid of player%} to 2
+				execute console command "eco give %player% 100"
+				send title "&2&l+100$"
+				wait 40 ticks
+				send "&emaintenant va craft une pioche en bois" to player
+				send action bar "&emaintenant va craft un pioche en bois" to player
+
+
+				# recompense et fonctionement or la 2e quete
+on craft of wooden pickaxe:
+	if {quest1.%uuid of player%} is 2:
+		send "&ebravo la pioche a été crafter"
+		play sound "entity.player.levelup" to player
+		send action bar "&ebravo la pioche a été craftter" to player
+		add 1 to {quest1.%uuid of player%}
+		wait 1 tick
+		close player's inventory	
+		execute console command "eco give %player% 100"
+		send title "&2&l+100$"
+		wait 40 tick
+		send action bar "&e maintenant va tuer un zombie" to player
+		send "&e maintenant va tuer un zombie" to player
+
+on death:
+	if victim is zombie:
+		if attacker is player:
+			if {quest1.%uuid of attacker%} is 3:
+				send "&e bravo tu a tué un zombie" to attacker
+				play sound "entity.player.levelup" to attacker
+				add 1 to {quest1.%uuid of attacker%}
+				send action bar "&e bravo tu a tué un zombie" to attacker
+				execute console command "eco give %attacker% 100"
+				send title "&2&l+100$" to attacker
+				wait 40 ticks 
+				send "&e maintenant fait toi une pioche en fer" to attacker
+				send action bar "&e maintenant fait toi une pioche en pierre" to attacker
+
+on craft of iron pickaxe:
+	if {quest1.%uuid of player%} is 4:
+		send "&e bravo tu a reussi a avoir une pioche en fer !" to player
+		play sound "entity.player.levelup" to player
+		send action bar "&e bravo tu a reussi a avoir une pioche en fer" to player
+		add 1 to {quest1.%uuid of player%} 
+		execute console command "eco give %player% 100"
+		send title "&2&l+100$" to player
+		wait 40 ticks
+		send "&emaintenant va te chercher 24 diamand pour te faire une armur" to player
+		send action bar "&emaintenant va te chercher 24 diamand pour te faire une armur" to player
+		set {diamant_miner.%uuid of player%} to 0
+
+on block break:
+	if event-block is diamond ore or deepslate diamond ore:
+		if {diamant_miner.%uuid of player%} < 24:
+			add 1 to {diamant_miner.%uuid of player%}
+			if {diamant_miner.%uuid of player%} is 24:
+				send "&ebravo tu a finis les quête, tien ton argent" to player
+				play sound "entity.player.levelup" to player
+				send action bar "&e bravo tu a finis les quête, tien ton argent" to player
+				execute console command "eco give %player% 1000"
+				wait 40 ticks 
+				send "ps:  tu peut faire /shubis" to player
+				
+				
+		
+	
+
+
+
+		#commande pour reset les variable
+command /resetquest:
+	trigger:
+		if player is op:
+			set {breakoaklog.%uuid of player%} to 0
+			set {quest1.%uuid of player%} to 0	
+			set {diamant_miner.%uuid of player%} to 0
+			send "quest remis a 0 (%{breakoaklog.%uuid of player%}%,%{quest1.%uuid of player%}%,%{diamant_miner.%uuid of player%}%) " to player
+		else:
+			send "tu n'a pas les perms"
+
+
+command /shubis:
+	trigger:
+		send "shubis est le meilleur" to player

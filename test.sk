@@ -1,0 +1,10 @@
+# la vie du mob quand il se fait taper
+
+
+
+# commande pour voir la vie 
+
+command /checklife <player>:
+	trigger:
+		set {_cible} to arg-1
+		send "%{_cible}'s health%" to player

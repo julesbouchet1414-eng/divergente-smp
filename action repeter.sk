@@ -1,0 +1,7 @@
+every 5 minutes:
+	broadcast "------------------------------------------------------------"
+	broadcast "&9------------------------------------------------------------"
+	broadcast "&9 rejoignez le serveur discord ! https://discord.gg/YBKA8ZTSW"
+	broadcast "&9------------------------------------------------------------"
+	broadcast "------------------------------------------------------------"
+	play sound "entity.player.levelup" to all players
