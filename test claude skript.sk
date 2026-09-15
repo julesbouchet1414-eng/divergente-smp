@@ -1,4 +1,4 @@
-# commande et interface du menu
+s# commande et interface du menu
 
 command /menu:
 	trigger:
@@ -39,6 +39,7 @@ on inventory click:
 			open chest inventory with 1 rows named "Zone" to player
 			set slot 0 of player's current inventory to emerald named "&a&lShop"
 			set slot 1 of player's current inventory to oak boat named "&3&lPort"
+			set slot 2 of player's current inventory to mace named "&c&lFFA"
 		
 
 	else if name of player's current inventory is "stats %player%":
@@ -68,6 +69,9 @@ on inventory click:
 		if clicked slot is 1:
 			close player's inventory 
 			execute player command "/warp port"
+		if clicked slot is 2:
+			close player's inventory
+			execute player command "/warp ffa"
 
 # kill d'un player
 
